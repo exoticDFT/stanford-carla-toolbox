@@ -19,6 +19,7 @@ target_compile_options(test
 set_target_properties(test
     PROPERTIES
         POSITION_INDEPENDENT_CODE ON
+        DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX}
 )
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 
