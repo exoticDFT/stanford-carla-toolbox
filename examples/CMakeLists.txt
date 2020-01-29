@@ -1,11 +1,11 @@
 # Create our exectuable target
-add_executable(test
-    ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+add_executable(embedJulia
+    ${CMAKE_CURRENT_SOURCE_DIR}/embedJulia.cpp
 )
 
 # Set some target specific options
-target_compile_features(test PUBLIC cxx_std_17)
-target_compile_options(test
+target_compile_features(embedJulia PUBLIC cxx_std_17)
+target_compile_options(embedJulia
     PRIVATE
         $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:
 	        -pipe -march=native -msse4.1
@@ -16,7 +16,7 @@ target_compile_options(test
     PUBLIC
         -DJULIA_ENABLE_THREADING=1
 )
-set_target_properties(test
+set_target_properties(embedJulia
     PROPERTIES
         POSITION_INDEPENDENT_CODE ON
         DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX}
@@ -28,11 +28,11 @@ find_package(Julia REQUIRED)
 find_package(Threads REQUIRED)
 
 # Link packages to our target
-target_include_directories(test
+target_include_directories(embedJulia
     PUBLIC
         $<BUILD_INTERFACE:${Julia_INCLUDE_DIRS}>
 )
-target_link_libraries(test
+target_link_libraries(embedJulia
     PUBLIC
         ${Julia_LIBRARY}
        Threads::Threads
