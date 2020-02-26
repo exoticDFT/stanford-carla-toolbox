@@ -13,6 +13,7 @@ export current_world_to_frame,
 
 # Carla scenario generation related functions
 include("adm_scenario.jl")
-export destroy_actors
+export destroy_actors,
+       initiate_scenario
 
 end #StanfordCarlaToolbox
