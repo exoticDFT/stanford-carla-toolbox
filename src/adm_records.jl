@@ -1,4 +1,4 @@
-function current_world_to_frame(
+function current_world_to_scene(
     world::PyCall.PyObject
 )
     # Get the Carla actors
@@ -64,9 +64,9 @@ function actor_to_entity(
     )
 end
 
-function get_entity_frame(
-    frame::AutomotiveSimulator.Scene,
+function get_entity_scene(
+    scene::AutomotiveSimulator.Scene,
     index::Int
 )
-    return frame[index]
+    return scene[index]
 end

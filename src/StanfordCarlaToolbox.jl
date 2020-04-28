@@ -6,8 +6,9 @@ import PyCall
 
 # AutomotiveSimulator records based functions
 include("adm_records.jl")
-export current_world_to_frame,
-       actor_to_entity
+export current_world_to_scene,
+       actor_to_entity,
+       get_entity_scene
 
 # Carla scenario generation related functions
 include("adm_scenario.jl")
