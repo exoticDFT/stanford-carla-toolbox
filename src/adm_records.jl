@@ -7,9 +7,9 @@ function current_world_to_frame(
     pedestrians = actors.filter("pedestrian.*")
 
     entities = Vector{
-        Records.Entity{
-            AutomotiveDrivingModels.VehicleState,
-            AutomotiveDrivingModels.VehicleDef,
+        AutomotiveSimulator.Entity{
+            AutomotiveSimulator.VehicleState,
+            AutomotiveSimulator.VehicleDef,
             Int64
         }
     }()
@@ -17,7 +17,7 @@ function current_world_to_frame(
     for actor in vehicles
         push!(
             entities,
-            actor_to_entity(actor, AutomotiveDrivingModels.AgentClass.CAR)
+            actor_to_entity(actor, AutomotiveSimulator.AgentClass.CAR)
         )
     end
     
@@ -26,12 +26,12 @@ function current_world_to_frame(
             entities,
             actor_to_entity(
                 actor,
-                AutomotiveDrivingModels.AgentClass.PEDESTRIAN
+                AutomotiveSimulator.AgentClass.PEDESTRIAN
             )
         )
     end
 
-    return Records.Frame(entities)
+    return AutomotiveSimulator.Scene(entities)
 end
 
 function actor_to_entity(
@@ -48,18 +48,25 @@ function actor_to_entity(
     # Calculate variables from above
     heading = orientation.yaw
     speed = sqrt(velocity.x*velocity.x + velocity.y*velocity.y)
-    global_pos = Vec.VecSE2(position.x, position.y, heading)
+    global_pos = AutomotiveSimulator.Vec.VecSE2(position.x, position.y, heading)
     length = 2.0 * bounding_box.y
     width = 2.0 * bounding_box.x
 
     # Set our vehicle parameters
-    vehicle_state = AutomotiveDrivingModels.VehicleState(global_pos, speed)
-    vehicle_def = AutomotiveDrivingModels.VehicleDef(actor_type, length, width)
+    vehicle_state = AutomotiveSimulator.VehicleState(global_pos, speed)
+    vehicle_def = AutomotiveSimulator.VehicleDef(actor_type, length, width)
     vehicle_id = actor.id
 
-    return AutomotiveDrivingModels.Vehicle(
+    return AutomotiveSimulator.Entity(
         vehicle_state,
         vehicle_def,
         vehicle_id
     )
+end
+
+function get_entity_frame(
+    frame::AutomotiveSimulator.Scene,
+    index::Int
+)
+    return frame[index]
 end
