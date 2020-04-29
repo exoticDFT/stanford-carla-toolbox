@@ -31,7 +31,8 @@ The toolbox extensively utilizes the
 the Carla simulator.
 
 * Carla PythonAPI egg - Found in the `PythonAPI/carla/dist/` directory of the
-  Carla simulator binary above. See [Using the Toolbox](#using-the-toolbox).
+  Carla simulator binary above. See
+  ["Setting Up Your Environment"](Setup.md#setting-up-your-environment).
 
 ### Julia
 
@@ -41,16 +42,14 @@ currently uses their provided Python API. Please make sure your environment is
 setup to load the Carla provided .egg file.
 
 * AutomotiveSimulator.jl
-* Formatting.jl
 * PyCall.jl
-* Python (2.7/3.5) - Carla only provides egg files for 2.7 and 3.5.
 
 ## Using the Toolbox
 
 In order to use the toolbox, you must first have the above
 [prerequisites](#prerequisites) installed on your system and follow the
 instructions provided in
-["Setting Up Your Environment".](Setup.md#setting-up-your-environment)
+["Setting Up Your Environment"](Setup.md#setting-up-your-environment).
 
 Before running any code that uses the toolbox, we must have a instance of the
 Carla server running. Open a terminal with the appropriate environment and run:

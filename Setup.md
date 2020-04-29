@@ -27,8 +27,9 @@ terminal you will be interacting with the toolbox.
 export PYTHONPATH=~/Simulators/Carla-0.9.7/PythonAPI/carla/dist/carla-0.9.7-py3.5-linux-x86_64.egg:$PYTHONPATH
 ```
 
-> ***Note:* Adding the line to your `~/.bashrc` file will load this path on every new
-terminal instance, but will be persistent for any other Python REPL.*
+> ***Note:** Adding the line to your `~/.bashrc` file will load this path on
+  every new terminal instance, but will be persistent for any other Python
+  REPL.*
 
 ## Julia
 
@@ -39,6 +40,9 @@ toolbox. The following is how the environment was setup during development.
 Once again, it is assumed the locations referenced exist on your system. If you
 would like to use different locations, simply update the location with your
 preference.
+
+> ***Note:** If your not familiar with Julia `pkg`, the `]` below must be
+  manually typed to enter pkg mode before the following text.*
 
 ```bash
 julia
