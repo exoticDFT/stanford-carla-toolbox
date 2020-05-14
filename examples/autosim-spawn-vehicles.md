@@ -42,7 +42,7 @@ world = client.get_world()
 2. This creates our Carla client by calling the toolbox function. Specifically,
    we connect to the local computer on port 2000 with a timeout of 3 seconds and
    load the "Town04" map once connected.
-3. This returns a Carla would object containing our loaded Town04 map. A world
+3. This returns a Carla World object containing our loaded Town04 map. A world
    object is generally needed for interacting with the Carla server (spawning,
    retrieving actor details, etc.)
 
@@ -82,9 +82,9 @@ bp4.set_attribute("color", "255, 0, 255")
 ## Initializing the scenario
 
 This section initializes the input parameters for the scenario generation. The
-first part provides a set of predetermined map spawn locations we want the
-cars to appear. These specific values are chosen to be on one of the main
-highway segments in which the server camera is viewing (at least in 0.9.7.). We
+first part provides a set of predetermined map spawn locations where we want the
+cars to appear. These specific locations are chosen to be on one of the main
+highway segments which the server camera is viewing (at least in 0.9.7.). We
 also create a list of PyObjects to store all the actors in the scenario that we
 are going to create.
 
@@ -103,17 +103,17 @@ try
     append!(actors, SCT.initiate_scenario(world, vehicles))
 ```
 
-1. Here we create a list of indices which correspond to the spawnpoint indices
-   from all spawnpoints in the Carla map.
+1. Here we create a list of desired spawnpoint indices from the list of all
+   possible spawnpoints of the Carla map.
 2. We set the first index in the list to a variable for later use.
 3. Same as above, but for the second spawnpoint.
 4. Same as above, but for the third spawnpoint.
 5. Same as above, but for the fourth spawnpoint.
 6. Empty line, purely for code readability.
-7. We need a dictionary of spawnpoint indices as keys and vehicle blueprints as
-   values, which will be used in the scenario initialization function.
+7. We need a dictionary with spawnpoint indices as keys and vehicle blueprints
+   as values, which will be used in the scenario initialization function.
 8. Last is a list to store all the actors we will be creating during the
-   scenario generation. This will be used to managing the actors during
+   scenario generation. This will be used to manage the actors during
    co-simulation.
 9. Empty line, purely for code readability.
 10. Start of try-finally block. This isn't strictly necessary, but allows us to
