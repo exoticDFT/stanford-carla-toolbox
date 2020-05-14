@@ -1,5 +1,8 @@
 # stanford-carla-toolbox
 
+[![Build Status](https://travis-ci.org/exoticdt/stanford-carla-toolbox.svg?branch=feature/code_coverage)](https://travis-ci.org/github/exoticDFT/stanford-carla-toolbox?branch=feature/code_coverage)
+[![Coverage Status](https://codecov.io/gh/exoticDFT/stanford-carla-toolbox/badge.svg?branch=feature/code_coverage)](https://codecov.io/gh/exoticDFT/stanford-carla-toolbox?branch=feature/code_coverage)
+
 A toolbox for the [Carla Simulator](http://carla.org/).
 
 This toolbox is a collection of useful C++, Python and Julia wrappers for
