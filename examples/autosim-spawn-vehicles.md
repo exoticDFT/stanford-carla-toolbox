@@ -4,6 +4,7 @@ This section will display code snippets throughout of the example and break down
 each line of the snippet. Let's take a look...
 
 ## Imports
+
 This first section imports specific Julia packages the example needs for using
 the toolbox. In general, these lines will be used in almost all the Julia code
 you write that uses the toolbox.
@@ -12,19 +13,21 @@ you write that uses the toolbox.
 import StanfordCarlaToolbox
 import PyCall
 import AutomotiveSimulator
+using Formatting
 
 AS = AutomotiveSimulator
 SCT = StanfordCarlaToolbox
 ```
 
-1. Imports this toolbox to be used throughout your Julia code.
+1. Imports this toolbox to be used throughout the Julia code.
 2. Imports the PyCall package, which is used to call Python within Julia.
 3. Imports AutomotiveSimulator package to be used throughout your Julia code.
-4. Empty line, purely for code readability.
-5. This is a helper variable that will simplify the functional calls to the
+4. Imports all the Formatting functions directly to be used throughout the code.
+5. Empty line, purely for code readability.
+6. This is a helper variable that will simplify the functional calls to the
 toolbox, so that you do not need to write the full package name every time you
 want to use a function within the toolbox.
-6. Same as above, but for the AutomoticeSimulator package.
+6. Same as above, but for the AutomotiveSimulator package.
 
 ## Carla basics
 
@@ -170,8 +173,9 @@ indeed in the same location in both simulator environments.
         # Get some current Carla info and print it out
         scene = SCT.current_world_to_scene(world)
         println("Scene: ", scene)
-        println("Scene[1]: ", SCT.get_entity_from_scene(scene, 1))
-        println("Actors[1]: ", PyCall.pystr(actors[1].get_transform()))
+        actor = actors[1]
+        printfmtln("Entity({1}): {2}", actor.id, AS.get_by_id(scene, actor.id))
+        printfmtln("Actor({1}): {2}", actor.id, PyCall.pystr(actor.get_transform()))
         sleep(timestep)
     end
 ```
@@ -210,13 +214,14 @@ indeed in the same location in both simulator environments.
 30. This calls another SCT function to convert the current Carla world into an
     AS Scene object.
 31. Prints the overall scene information to show all the actors in the scene.
-32. Calls another SCT function to return only one specific actor in the scene.
-33. Here we are just printing the actor's transform, which is an object of all
+32. Creates a variable to store the first actor that was created.
+33. Calls an AS function to return only one specific actor in the scene.
+34. Here we are just printing the actor's transform, which is an object of all
    carla.Actor objects. We need to call the `PyCall.pystr` function to make sure
    the python string is printed for the object and not Julia's representation of
    the object.
-31. The loop now sleeps for the desired time before doing the next tick.
-32. The end of the `for` loop.
+35. The loop now sleeps for the desired time before doing the next tick.
+36. The end of the `for` loop.
 
 ## Ending the client
 

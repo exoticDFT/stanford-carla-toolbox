@@ -4,6 +4,7 @@ This section will display code snippets throughout of the example and break down
 each line of the snippet. Let's take a look...
 
 ## Imports
+
 This first section imports specific Julia packages the example needs for using
 the toolbox. In general, these lines will be used in almost all the Julia code
 you write that uses the toolbox.

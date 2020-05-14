@@ -106,7 +106,7 @@ Entity.
 - `index`: An index representing the Entity to get from the scene.
 ...
 
-Returns the Entity represented by its id from the provided scene.
+Returns the Entity represented by its index in the provided scene.
 """
 function get_entity_from_scene(
     scene::AutomotiveSimulator.Scene,
