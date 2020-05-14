@@ -10,8 +10,8 @@ world = client.get_world()
 
 # Create a blueprint for the vehicle
 blueprint_library = world.get_blueprint_library().filter("vehicle.*")
-blueprint = blueprint_library.filter("prius")
-bp1 = get(blueprint, 0)
+blueprints = blueprint_library.filter("prius")
+bp1 = get(blueprints, 0)
 
 bp1.set_attribute("color", "255, 0, 0")
 
