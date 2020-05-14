@@ -1,0 +1,17 @@
+matrix:
+  include:
+    - language: python
+      python: 3.5
+      install:
+        - pip install codecov
+      after_success:
+      - "codecov"
+
+    - language: julia
+      dist:
+        - 1.3
+        - nightly
+      codecov: true
+      after_success:
+        - julia -e 'using Pkg; Pkg.add("Coverage");'
+        - julia -e 'using Coverage; Codecov.submit(process_folder())'
