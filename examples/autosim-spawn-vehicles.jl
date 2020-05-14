@@ -69,7 +69,7 @@ try
         # Get some current Carla info and print it out
         scene = SCT.current_world_to_scene(world)
         println("Scene: ", scene)
-        println("Scene[1]: ", SCT.get_entity_scene(scene, 1))
+        println("Scene[1]: ", SCT.get_entity_from_scene(scene, 1))
         println("Actors[1]: ", PyCall.pystr(actors[1].get_transform()))
         sleep(timestep)
     end

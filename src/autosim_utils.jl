@@ -1,3 +1,17 @@
+"""
+    current_world_to_scene(world)
+
+Takes the provided Carla World and returns the currect state of all vehicles and
+pedestrians as a AutomotiveSimulator Scene.
+
+...
+# Arguments
+- `world`: The Carla World on the running server.
+...
+
+Return a AutomotiveSimulator.Scene with vehicle and pedestrian actors in the
+current Carla World.
+"""
 function current_world_to_scene(
     world::PyCall.PyObject
 )
@@ -34,6 +48,21 @@ function current_world_to_scene(
     return AutomotiveSimulator.Scene(entities)
 end
 
+"""
+    actor_to_entity(actor, actor_type)
+
+Takes the provided Carla Actor and AutomotiveSimulator AgentClass to convert the
+Carla Actor into an AutomotiveSimulator Entity.
+
+...
+# Arguments
+- `actor`: The Carla Actor that will be converted.
+- `actor_type`: The AutomotiveSimulator AgentClass the actor will be converted
+    into.
+...
+
+Returns an AutomotiveSimulator.Entity converted from the provided Carla Actor.
+"""
 function actor_to_entity(
     actor::PyCall.PyObject,
     actor_type::Int64 # AgentClass should be provided
@@ -64,7 +93,22 @@ function actor_to_entity(
     )
 end
 
-function get_entity_scene(
+"""
+    get_entity_from_scene(scene, index)
+
+Takes a AutomotiveSimulator Scene and index in the scene to return that specific
+Entity.
+
+...
+# Arguments:
+- `scene`: A AutomotiveSimulator Scene that contains the details of the
+    simulator at that instant.
+- `index`: An index representing the Entity to get from the scene.
+...
+
+Returns the Entity represented by its id from the provided scene.
+"""
+function get_entity_from_scene(
     scene::AutomotiveSimulator.Scene,
     index::Int
 )

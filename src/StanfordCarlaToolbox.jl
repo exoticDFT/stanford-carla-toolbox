@@ -8,7 +8,7 @@ import PyCall
 include("autosim_utils.jl")
 export current_world_to_scene,
        actor_to_entity,
-       get_entity_scene
+       get_entity_from_scene
 
 # Carla client based functions
 include("client_utils.jl")
