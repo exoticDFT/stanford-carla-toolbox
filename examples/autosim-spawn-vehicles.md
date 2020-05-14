@@ -220,7 +220,7 @@ indeed in the same location in both simulator environments.
 
 ## Ending the client
 
-This last section wait a few seconds before removing the actors from the Carla
+This last section waits a few seconds before removing the actors from the Carla
 server. Nothing else fancy here.
 
 ```julia
@@ -231,7 +231,7 @@ finally
 end
 ```
 
-1. This is the finally section of the try-finally block discussed earlier.
+1. This is the `finally` section of the try-finally block discussed earlier.
 2. Comment, purely for code readability.
 3. Sleep the client for three seconds before continuing.
 4. This call to the toolbox function for removing, or "destroying" the actors we
