@@ -1,5 +1,7 @@
 import carla
 
+import logging
+
 
 def create(
     host='127.0.0.1',
@@ -37,3 +39,20 @@ def create(
         client.load_world(map_name)
 
     return client
+
+
+def destroy_actors_in_list(client, actor_list):
+    '''
+    Destroys (removes) the list of actors from Carla server in which  the client
+    is connected.
+
+    Parameters
+    ----------
+    client : carla.Client
+        The Carla client that is connected to the Carla server in which to
+        remove the actors.
+    actor_list : List
+        The list of actors that should be destroyed.
+    '''    
+    logging.info('Destroying {} actors'.format(len(actor_list)))
+    client.apply_batch([carla.command.DestroyActor(x) for x in actor_list])
