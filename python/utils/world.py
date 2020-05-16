@@ -3,7 +3,7 @@ import python.utils.actor
 import carla
 
 
-def destroy_all_dynamic_actors(world):
+def destroy_all_dynamic_actors(world: carla.World) -> None:
     '''
     Removes all the dynamic actors in the Carla World.
 
@@ -19,7 +19,7 @@ def destroy_all_dynamic_actors(world):
             actor.destroy()
 
 
-def draw_spawn_points(world, timeout=-1.0):
+def draw_spawn_points(world: carla.World, timeout: float = -1.0) -> None:
     '''
     Draws all the available spawn points in the current Carla world.
 
@@ -44,14 +44,33 @@ def draw_spawn_points(world, timeout=-1.0):
 
 
 def move_spectator(
-    world,
-    location=None,
-    rotation=None,
-    transform=carla.Transform(
+    world: carla.World,
+    location: carla.Location = None,
+    rotation: carla.Rotation = None,
+    transform: carla.Transform = carla.Transform(
         carla.Location(0.0, 0.0, 20.0),
         carla.Rotation(-90.0, 0.0, 0.0)
     )
-):
+) -> None:
+    '''
+    Moves the main camera in the server, also known as the spectator.
+    
+    Either provide the location and rotation directly, or a transform. If both
+    are provided, the location and rotation parameters will override the
+    transform parameter.
+
+    Parameters
+    ----------
+    world : carla.World
+        The Carla World of the spectator that will be moved.
+    location : carla.Location, optional
+        The location to move the camera, by default None
+    rotation : carla.Rotation, optional
+        The orientation of the camera, by default None
+    transform : carla.Transform, optional
+        The transform (location and rotation) of the camera, by default 20
+        meters above the world origin facing straight down.
+    '''
     if location and rotation:
         transform = carla.Transform(location, rotation)
 
@@ -60,12 +79,12 @@ def move_spectator(
 
 
 def remove_distant_actors(
-    world,
-    location=carla.Location(0, 0, 0),
-    max_distance=100.0,
-    actor_filter='vehicle.*',
-    verbose=False
-):
+    world: carla.World,
+    location: carla.Location = carla.Location(0, 0, 0),
+    max_distance: float = 100.0,
+    actor_filter: str = 'vehicle.*',
+    verbose: bool = False
+) -> None:
     '''
     Removes actors from the Carla world when outside a given area.
 
@@ -106,7 +125,12 @@ def remove_distant_actors(
         )
 
 
-def spawn_actor(world, blueprints, transform, verbose=False):
+def spawn_actor(
+    world: carla.World,
+    blueprints: carla.BlueprintLibrary,
+    transform: carla.Transform,
+    verbose: bool = False
+) -> carla.Actor or None:
     '''
     Tries to spawn an actor in the Carla world.
 
