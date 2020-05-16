@@ -3,6 +3,22 @@ import python.utils.actor
 import carla
 
 
+def destroy_all_dynamic_actors(world):
+    '''
+    Removes all the dynamic actors in the Carla World.
+
+    Parameters
+    ----------
+    world : carla.World
+        The Carla world in which to remove the actors
+    '''
+    actor_types = ['sensor', 'vehicle', 'walker',]
+
+    for actor in world.get_actors():
+        if any(sub in actor.type_id for sub in actor_types):
+            actor.destroy()
+
+
 def draw_spawn_points(world, timeout=-1.0):
     '''
     Draws all the available spawn points in the current Carla world.
