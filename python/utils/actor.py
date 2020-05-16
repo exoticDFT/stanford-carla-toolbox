@@ -8,7 +8,7 @@ import time
 def create_random_blueprint(
     blueprints: carla.BlueprintLibrary,
     color: str = ''
-):
+) -> carla.ActorBlueprint:
     '''
     Creates a random Carla actor blueprint based on some provided blueprint
     library.
@@ -17,9 +17,9 @@ def create_random_blueprint(
     ----------
     blueprints : carla.BlueprintLibrary
         A set of Carla blueprint templates used for creating a blueprint.
-    color : string, default is empty string
+    color : str, optional
         RGB string used for determining the vehicle's color, order and format
-        is 'R, G, B'
+        is 'R, G, B', by default ''.
 
     Returns
     -------
@@ -42,12 +42,29 @@ def create_random_blueprint(
 
 
 def draw_boundingbox(
-    actor,
-    life_time=-1.0,
-    color=carla.Color(255, 0, 0),
-    thickness=0.1,
-    offset=carla.Location(0.0, 0.0, 0.0)
+    actor: carla.Actor,
+    life_time: float = -1.0,
+    color: carla.Color = carla.Color(255, 0, 0),
+    thickness: float = 0.1,
+    offset: carla.Location = carla.Location(0.0, 0.0, 0.0)
 ):
+    '''
+    Draws a bounding box around the Carla Actor.
+
+    Parameters
+    ----------
+    actor : carla.Actor
+        The Carla Actor to draw the bounding box around.
+    life_time : float, optional
+        The amount of time the bounding box should display, by default -1.0.
+    color : carla.Color, optional
+        The color of the bounding box, by default carla.Color(255, 0, 0).
+    thickness : float, optional
+        The thickness of the bounding box lines, by default 0.1.
+    offset : carla.Location, optional
+        An offset from the actor's center, by default
+        carla.Location(0.0, 0.0, 0.0).
+    '''
     world = actor.get_world()
     world.debug.draw_box(
         carla.BoundingBox(
@@ -62,16 +79,41 @@ def draw_boundingbox(
 
 
 def initialize(
-    world,
-    blueprint,
-    position=carla.Vector3D(0.0, 0.0, 0.0),
-    rotation=carla.Rotation(0.0, 0.0, 0.0),
-    transform=None,
-    verbose=False
-):
+    world: carla.World,
+    blueprint: carla.ActorBlueprint,
+    position: carla.Vector3D = carla.Vector3D(0.0, 0.0, 0.0),
+    rotation: carla.Rotation = carla.Rotation(0.0, 0.0, 0.0),
+    transform: carla.Transform = None,
+    verbose: bool = False
+) -> carla.Actor:
     '''
     Initializes a Carla actor with the provided data and returns the created
     actor.
+
+    Either provide the location and rotation directly, or a transform. If both
+    are provided, the location and rotation parameters will override the
+    transform parameter.
+
+    Parameters
+    ----------
+    world : carla.World
+        The Carla World to spawn the actor.
+    blueprint : carla.ActorBlueprint
+        The blueprint for the actor.
+    position : carla.Vector3D, optional
+        The location of the actor, by default carla.Vector3D(0.0, 0.0, 0.0).
+    rotation : carla.Rotation, optional
+        The rotation of the actor, by default carla.Rotation(0.0, 0.0, 0.0)
+    transform : carla.Transform, optional
+        The transform (location and rotation) of the actor, by default None.
+    verbose : bool, optional
+        Used to determine whether some information should be displayed, by
+        default False.
+
+    Returns
+    -------
+    carla.Actor
+        The spawned actor
     '''
     if not transform:
         transform = carla.Transform(position, rotation)
@@ -95,9 +137,14 @@ def initialize(
     return actor
 
 
-def print_info(actor):
+def print_info(actor: carla.Actor) -> None:
     '''
     Prints some information about the actor provided.
+
+    Parameters
+    ----------
+    actor : carla.Actor
+        The Carla Actor to print information about.
     '''
     print("   Id:", actor.id)
     print("   Type Id:", actor.type_id)
@@ -112,10 +159,10 @@ def print_info(actor):
 
 
 def in_range(
-    actor,
-    origin=carla.Location(0.0, 0.0, 0.0),
-    max_distance=100.0,
-    verbose=False
+    actor: carla.Actor,
+    origin: carla.Location = carla.Location(0.0, 0.0, 0.0),
+    max_distance: float = 100.0,
+    verbose: bool = False
 ):
     '''
     Checks if a Carla actor is within a certain distance from a location.
