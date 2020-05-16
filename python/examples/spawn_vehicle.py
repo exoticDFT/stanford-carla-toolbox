@@ -1,14 +1,26 @@
 import python.utils.actor
 import python.utils.client
+import python.utils.common
 import python.utils.world
 
 import carla
 
+import logging
+import os
 import time
 
 
 def main():
-    carla_client = python.utils.client.create(map_name="Town04")
+    logging.basicConfig(
+        format='%(levelname)s: %(message)s',
+        level=getattr(logging, "INFO")
+    )
+
+    logging.info("Starting the {} example.".format(os.path.basename(__file__)))
+    carla_client = python.utils.client.create(
+        map_name="Town04",
+        force_reset=True
+    )
     carla_world = carla_client.get_world()
     carla_map = carla_world.get_map()
     python.utils.world.draw_spawn_points(carla_world, 10.0)
@@ -33,12 +45,20 @@ def main():
             )
         )
 
+        logging.info("Press crtl+c to exit the program.")
+
         while True:
-            pass
+            carla_world.wait_for_tick()
 
     finally:
-        for actor in actors:
-            actor.destroy()
+        python.utils.common.sleep_random_time()
+        python.utils.client.destroy_actors_in_list(carla_client, actors)
 
 
-main()
+# Start the program
+try:
+    main()
+except KeyboardInterrupt:
+    time.sleep(5.0)
+finally:
+    logging.info('Program finished.')
