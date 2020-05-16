@@ -5,7 +5,8 @@ def create(
     host='127.0.0.1',
     port=2000,
     timeout=3.0,
-    map_name='/Game/Carla/Maps/Town03'
+    map_name='/Game/Carla/Maps/Town03',
+    force_reset=False
 ):
     '''
     Creates a Carla client to be used in a Carla runtime script.
@@ -18,8 +19,10 @@ def create(
         The port in which the client will connect.
     timeout : float, optional
         The time in which to wait for a response from the server.
-    map_name : carla.Map
+    map_name : carla.Map, optional
         The Carla map that you would like the world to load.
+    force_reset : Boolean, optional
+        The decision to reset the whole world on initialization.
 
     Returns
     -------
@@ -30,7 +33,7 @@ def create(
     client.set_timeout(timeout)
     world = client.get_world()
 
-    if world.get_map().name != map_name:
+    if world.get_map().name != map_name or force_reset:
         client.load_world(map_name)
 
     return client
