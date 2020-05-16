@@ -4,12 +4,12 @@ import logging
 
 
 def create(
-    host='127.0.0.1',
-    port=2000,
-    timeout=3.0,
-    map_name='/Game/Carla/Maps/Town03',
-    force_reset=False
-):
+    host: str = '127.0.0.1',
+    port: int = 2000,
+    timeout: float = 3.0,
+    map_name: str = '/Game/Carla/Maps/Town03',
+    force_reset: bool = False
+) -> carla.Client:
     '''
     Creates a Carla client to be used in a Carla runtime script.
 
@@ -21,9 +21,9 @@ def create(
         The port in which the client will connect.
     timeout : float, optional
         The time in which to wait for a response from the server.
-    map_name : carla.Map, optional
+    map_name : str, optional
         The Carla map that you would like the world to load.
-    force_reset : Boolean, optional
+    force_reset : bool, optional
         The decision to reset the whole world on initialization.
 
     Returns
@@ -41,7 +41,7 @@ def create(
     return client
 
 
-def destroy_actors_in_list(client, actor_list):
+def destroy_actors_in_list(client: carla.Client, actor_list: list) -> None:
     '''
     Destroys (removes) the list of actors from Carla server in which  the client
     is connected.
@@ -61,7 +61,7 @@ def destroy_actors_in_list(client, actor_list):
 def start_recording(
     client: carla.Client,
     filename: str
-):
+) -> None:
     '''
     Starts the Carla recording functionality for the Carla server.
 
@@ -82,7 +82,7 @@ def start_recording(
     client.start_recorder(filename)
 
 
-def stop_recording(client: carla.Client):
+def stop_recording(client: carla.Client) -> None:
     '''
     Stops the recording of the Carla server.
 
