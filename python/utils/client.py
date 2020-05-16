@@ -53,6 +53,45 @@ def destroy_actors_in_list(client, actor_list):
         remove the actors.
     actor_list : List
         The list of actors that should be destroyed.
-    '''    
+    '''
     logging.info('Destroying {} actors'.format(len(actor_list)))
     client.apply_batch([carla.command.DestroyActor(x) for x in actor_list])
+
+
+def start_recording(
+    client: carla.Client,
+    filename: str
+):
+    '''
+    Starts the Carla recording functionality for the Carla server.
+
+    Parameters
+    ----------
+    client : carla.Client
+        The Carla client connected to the Carla server to record.
+    filename : str
+        The name of the file the recording will be saved. This can be a full
+        path to the file or just a file name. If the latter is used, the
+        recording will be saved to the default location Carla uses.
+    '''
+    logging.info(
+        'This scenario is being recorded as {}'.format(
+            filename
+        )
+    )
+    client.start_recorder(filename)
+
+
+def stop_recording(client: carla.Client):
+    '''
+    Stops the recording of the Carla server.
+
+    Parameters
+    ----------
+    client : carla.Client
+        The Carla client connected to the Carla server to stop recording.
+    '''
+    logging.info(
+        'The scenario is no longer recording.'
+    )
+    client.stop_recorder()
