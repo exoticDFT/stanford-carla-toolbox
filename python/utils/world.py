@@ -2,6 +2,26 @@ import python.utils.actor
 
 import carla
 
+import logging
+import re
+
+
+def change_weather(
+    world: carla.World,
+    weather_preset: str = 'ClearNoon'
+) -> None:
+    weather = carla.WeatherParameters()
+    presets = [func for func in dir(weather) if re.match('[A-Z].+', func)]
+    if weather_preset in presets:
+        world.set_weather(getattr(carla.WeatherParameters, weather_preset))
+    else:
+        logging.warning(
+            '{} is not a recognized preset. Presets available:\n{}'.format(
+                weather_preset,
+                presets
+            )
+        )
+
 
 def destroy_all_dynamic_actors(world: carla.World) -> None:
     '''
@@ -12,7 +32,7 @@ def destroy_all_dynamic_actors(world: carla.World) -> None:
     world : carla.World
         The Carla world in which to remove the actors
     '''
-    actor_types = ['sensor', 'vehicle', 'walker',]
+    actor_types = ['sensor', 'vehicle', 'walker']
 
     for actor in world.get_actors():
         if any(sub in actor.type_id for sub in actor_types):
@@ -116,7 +136,7 @@ def remove_distant_actors(
         actor.destroy()
 
         if verbose:
-            print("Actor", actor.id, "removed from scenario.")
+            print('Actor', actor.id, 'removed from scenario.')
 
     if verbose:
         print(
@@ -164,7 +184,7 @@ def spawn_actor(
     )
 
     if actor and autopilot:
-        if "vehicle" in actor.type_id:
+        if 'vehicle' in actor.type_id:
             actor.set_autopilot(True)
 
     return actor
