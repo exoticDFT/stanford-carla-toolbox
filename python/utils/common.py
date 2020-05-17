@@ -8,7 +8,7 @@ import time
 
 
 # modules
-def np_array_to_vector2D(array):
+def np_array_to_vector2D(array: numpy.array) -> carla.Vector2D:
     '''
     Converts a numpy array to a Carla 2D Vector.
 
@@ -22,7 +22,7 @@ def np_array_to_vector2D(array):
     return vector
 
     
-def array_to_vector3D(array):
+def np_array_to_vector3D(array: numpy.array) -> carla.Vector3D:
     '''
     Converts a numpy array to a Carla 3D Vector.
 
@@ -36,7 +36,7 @@ def array_to_vector3D(array):
     return vector
 
 
-def sleep_random_time(start=2.0, end=6.0):
+def sleep_random_time(start: float = 2.0, end: float = 6.0) -> None:
     '''
     Sleeps the thread for some random time between the provided range.
 
