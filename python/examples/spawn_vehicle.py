@@ -41,6 +41,7 @@ def main():
                 carla_world,
                 vehicle_blueprints,
                 vehicle_spawnpoints[56],
+                True,
                 False
             )
         )

@@ -129,6 +129,7 @@ def spawn_actor(
     world: carla.World,
     blueprints: carla.BlueprintLibrary,
     transform: carla.Transform,
+    autopilot: bool = True,
     verbose: bool = False
 ) -> carla.Actor or None:
     '''
@@ -142,6 +143,9 @@ def spawn_actor(
     transform : carla.Transform
         The transform (pose) used spawn the actor. Usually determined from 
         carla.Map.get_spawn_points().
+    autopilot : bool, optional
+        If the vehicle is a vehicle, this will set its autopilot functionality,
+        by default True.
     verbose : bool, optional
         Used to determine whether some information should be displayed.
 
@@ -159,7 +163,7 @@ def spawn_actor(
         verbose=verbose
     )
 
-    if actor:
+    if actor and autopilot:
         if "vehicle" in actor.type_id:
             actor.set_autopilot(True)
 
