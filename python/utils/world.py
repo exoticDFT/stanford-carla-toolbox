@@ -1,6 +1,7 @@
 import python.utils.actor
 
 import carla
+import numpy
 
 import logging
 import re
@@ -39,6 +40,59 @@ def destroy_all_dynamic_actors(world: carla.World) -> None:
             actor.destroy()
 
 
+def draw_line_between_actors(
+    world: carla.World,
+    actor1: carla.Actor,
+    actor2: carla.Actor,
+    thickness: float = 0.1,
+    color: carla.Color = carla.Color(255, 0, 0),
+    life_time: float = -1.0
+) -> None:
+    world.debug.draw_line(
+        actor1.get_location() + carla.Location(z=0.5),
+        actor2.get_location() + carla.Location(z=0.5),
+        thickness,
+        color,
+        life_time
+    )
+
+
+def draw_arc_between_actors(
+    world: carla.World,
+    actor1: carla.Actor,
+    actor2: carla.Actor,
+    z_offset: float = 2.0,
+    z_peak: float = 5.0,
+    thickness: float = 0.1,
+    color: carla.Color = carla.Color(255, 0, 0),
+    life_time: float = -1.0
+) -> None:
+    # z_peak quadratic term: Height of the arc
+    actor1_position = actor1.get_location()
+    actor2_position = actor2.get_location()
+    x1 = actor1_position.x
+    y1 = actor1_position.y
+    z1 = actor1_position.z + z_offset
+    x2 = actor2_position.x
+    y2 = actor2_position.y
+    z2 = actor2_position.z + z_offset
+    prev_position = carla.Location(x2, y2, z2)
+
+    for alpha in numpy.arange(0, 1.0, 0.01):
+        x = alpha*x1 + (1 - alpha)*x2
+        y = alpha*y1 + (1 - alpha)*y2
+        z = alpha*z1 + (1 - alpha)*z2 + 4*z_peak*alpha*(1 - alpha)
+        next_position = carla.Location(x, y, z)
+        world.debug.draw_line(
+            prev_position,
+            next_position,
+            thickness,
+            color,
+            life_time
+        )
+        prev_position = next_position
+
+
 def draw_spawn_points(world: carla.World, timeout: float = -1.0) -> None:
     '''
     Draws all the available spawn points in the current Carla world.
@@ -74,7 +128,7 @@ def move_spectator(
 ) -> None:
     '''
     Moves the main camera in the server, also known as the spectator.
-    
+
     Either provide the location and rotation directly, or a transform. If both
     are provided, the location and rotation parameters will override the
     transform parameter.
