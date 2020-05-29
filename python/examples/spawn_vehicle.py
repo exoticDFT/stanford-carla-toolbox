@@ -18,6 +18,7 @@ def main():
 
     logging.info("Starting the {} example.".format(os.path.basename(__file__)))
     carla_client = python.utils.client.create(
+        timeout=6.0,
         map_name="Town04",
         force_reset=True
     )
