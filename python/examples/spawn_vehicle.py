@@ -53,7 +53,6 @@ def main():
             carla_world.wait_for_tick()
 
     finally:
-        python.utils.common.sleep_random_time()
         python.utils.client.destroy_actors_in_list(carla_client, actors)
 
 
@@ -61,6 +60,6 @@ def main():
 try:
     main()
 except KeyboardInterrupt:
-    time.sleep(5.0)
+    python.utils.common.sleep_random_time()
 finally:
     logging.info('Program finished.')
