@@ -11,6 +11,21 @@ def change_weather(
     world: carla.World,
     weather_preset: str = 'ClearNoon'
 ) -> None:
+    '''
+    Changes the weather in the Carla server.
+
+    This function takes a string that is predefined for the simulator. Some
+    examples include, "ClearNoon", "WetNoon", "ClearSunset", etc. For a list of
+    all the available options, please look at the Carla documentation.
+
+    Parameters
+    ----------
+    world : carla.World
+        The Carla World in which to change the weather.
+    weather_preset : str, optional
+        A string representing a predefined weather setting, by default
+        'ClearNoon'.
+    '''
     weather = carla.WeatherParameters()
     presets = [func for func in dir(weather) if re.match('[A-Z].+', func)]
     if weather_preset in presets:
@@ -48,6 +63,24 @@ def draw_line_between_actors(
     color: carla.Color = carla.Color(255, 0, 0),
     life_time: float = -1.0
 ) -> None:
+    '''
+    Renders a line in the Carla Server between the two provided Actors.
+
+    Parameters
+    ----------
+    world : carla.World
+        The Carla world in which the line will be rendered.
+    actor1 : carla.Actor
+        The first Carla actor to render the line.
+    actor2 : carla.Actor
+        The second Carla actor to render the line.
+    thickness : float, optional
+        The thickness of the rendered line, by default 0.1.
+    color : carla.Color, optional
+        The color of the rendered line, by default carla.Color(255, 0, 0).
+    life_time : float, optional
+        The time in which the line will stay on the server, by default -1.0.
+    '''
     world.debug.draw_line(
         actor1.get_location() + carla.Location(z=0.5),
         actor2.get_location() + carla.Location(z=0.5),
@@ -67,6 +100,29 @@ def draw_arc_between_actors(
     color: carla.Color = carla.Color(255, 0, 0),
     life_time: float = -1.0
 ) -> None:
+    '''
+    Renders a curved line (arc) in the Carla Server between the two provided
+    Actors.
+
+    Parameters
+    ----------
+    world : carla.World
+        The Carla world in which the line will be rendered.
+    actor1 : carla.Actor
+        The first Carla actor to render the arc.
+    actor2 : carla.Actor
+        The second Carla actor to render the arc.
+    z_offset : float, optional
+        The z location above the vehicle to start the arc, by default 2.0.
+    z_peak : float, optional
+        Parameter for determing the height of the arc peak, by default 5.0.
+    thickness : float, optional
+        The thickness of the rendered arc, by default 0.1.
+    color : carla.Color, optional
+        The color of the rendered arc, by default carla.Color(255, 0, 0).
+    life_time : float, optional
+        The time in which the arc will stay on the server, by default -1.0.
+    '''
     # z_peak quadratic term: Height of the arc
     actor1_position = actor1.get_location()
     actor2_position = actor2.get_location()
