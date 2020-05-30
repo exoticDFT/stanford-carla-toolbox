@@ -102,8 +102,8 @@ def draw_spawn_points(world: carla.World, timeout: float = -1.0) -> None:
     world : carla.World
         The Carla world in which to draw the spawn point indices.
     timeout : float, optional
-        The total number of seconds in which to keep the labels in the 
-        environment. (Default is -1.0, which leaves the label in the 
+        The total number of seconds in which to keep the labels in the
+        environment. (Default is -1.0, which leaves the label in the
         environment indefinitely.)
     '''
     map = world.get_map()
@@ -215,7 +215,7 @@ def spawn_actor(
     blueprints : carla.BlueprintLibrary
         A set of Carla blueprint templates used for creating a blueprint.
     transform : carla.Transform
-        The transform (pose) used spawn the actor. Usually determined from 
+        The transform (pose) used spawn the actor. Usually determined from
         carla.Map.get_spawn_points().
     autopilot : bool, optional
         If the vehicle is a vehicle, this will set its autopilot functionality,

@@ -43,5 +43,3 @@ class ClientTest(unittest.TestCase):
         carla_map = self.client.get_world().get_map()
         # self.assertEqual(self.client.get_timeout(), self.timeout)
         self.assertEqual(carla_map.name, self.map_name)
-
-

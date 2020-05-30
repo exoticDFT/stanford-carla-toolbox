@@ -32,7 +32,7 @@ def main():
             carla.Rotation(pitch=-17.857296, yaw=174.745468, roll=0.000119)
         )
     )
-    vehicle_blueprints = carla_world.get_blueprint_library().filter("vehicle.*")
+    vehicle_blueprints = carla_world.get_blueprint_library().filter("vehicle*")
     vehicle_spawnpoints = carla_map.get_spawn_points()
     actors = []
 

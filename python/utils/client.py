@@ -43,8 +43,8 @@ def create(
 
 def destroy_actors_in_list(client: carla.Client, actor_list: list) -> None:
     '''
-    Destroys (removes) the list of actors from Carla server in which  the client
-    is connected.
+    Destroys (removes) the list of actors from Carla server in which  the
+    client is connected.
 
     Parameters
     ----------
