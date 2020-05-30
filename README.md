@@ -69,3 +69,9 @@ julia --project=~/Development/VirtualEnvironments/Julia/sct-testing \
 
 This example only provides a brief look at the functionality of the toolbox. For
 further examples, look under the `examples` directory.
+
+The same idea can be applied to the Python examples.
+
+```bash
+python ~/Development/stanford-carla-toolbox/python/examples/spawn_vehicle.py
+```
