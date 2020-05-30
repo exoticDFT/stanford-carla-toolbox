@@ -59,6 +59,7 @@ def draw_line_between_actors(
     world: carla.World,
     actor1: carla.Actor,
     actor2: carla.Actor,
+    z_offset: float = 0.5,
     thickness: float = 0.1,
     color: carla.Color = carla.Color(255, 0, 0),
     life_time: float = -1.0
@@ -74,6 +75,8 @@ def draw_line_between_actors(
         The first Carla actor to render the line.
     actor2 : carla.Actor
         The second Carla actor to render the line.
+    z_offset : float, optional
+        The z location above the vehicle to start the arc, by default 0.5.
     thickness : float, optional
         The thickness of the rendered line, by default 0.1.
     color : carla.Color, optional
@@ -82,8 +85,8 @@ def draw_line_between_actors(
         The time in which the line will stay on the server, by default -1.0.
     '''
     world.debug.draw_line(
-        actor1.get_location() + carla.Location(z=0.5),
-        actor2.get_location() + carla.Location(z=0.5),
+        actor1.get_location() + carla.Location(z=z_offset),
+        actor2.get_location() + carla.Location(z=z_offset),
         thickness,
         color,
         life_time
