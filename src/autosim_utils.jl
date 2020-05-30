@@ -1,4 +1,49 @@
 """
+    actor_to_entity(actor, actor_type)
+
+Takes the provided Carla Actor and AutomotiveSimulator AgentClass to convert the
+Carla Actor into an AutomotiveSimulator Entity.
+
+...
+# Arguments
+- `actor`: The Carla Actor that will be converted.
+- `actor_type`: The AutomotiveSimulator AgentClass the actor will be converted
+    into.
+...
+
+Returns an AutomotiveSimulator.Entity converted from the provided Carla Actor.
+"""
+function actor_to_entity(
+    actor::PyCall.PyObject,
+    actor_type::Int64 # AgentClass should be provided
+)
+    # Get information from the Carla actor
+    trans = actor.get_transform()
+    position = trans.location
+    orientation = trans.rotation
+    velocity = actor.get_velocity()
+    bounding_box = actor.bounding_box.extent
+
+    # Calculate variables from above
+    heading = orientation.yaw
+    speed = sqrt(velocity.x*velocity.x + velocity.y*velocity.y)
+    global_pos = AutomotiveSimulator.Vec.VecSE2(position.x, position.y, heading)
+    length = 2.0 * bounding_box.y
+    width = 2.0 * bounding_box.x
+
+    # Set our vehicle parameters
+    vehicle_state = AutomotiveSimulator.VehicleState(global_pos, speed)
+    vehicle_def = AutomotiveSimulator.VehicleDef(actor_type, length, width)
+    vehicle_id = actor.id
+
+    return AutomotiveSimulator.Entity(
+        vehicle_state,
+        vehicle_def,
+        vehicle_id
+    )
+end
+
+"""
     current_world_to_scene(world)
 
 Takes the provided Carla World and returns the currect state of all vehicles and
@@ -46,51 +91,6 @@ function current_world_to_scene(
     end
 
     return AutomotiveSimulator.Scene(entities)
-end
-
-"""
-    actor_to_entity(actor, actor_type)
-
-Takes the provided Carla Actor and AutomotiveSimulator AgentClass to convert the
-Carla Actor into an AutomotiveSimulator Entity.
-
-...
-# Arguments
-- `actor`: The Carla Actor that will be converted.
-- `actor_type`: The AutomotiveSimulator AgentClass the actor will be converted
-    into.
-...
-
-Returns an AutomotiveSimulator.Entity converted from the provided Carla Actor.
-"""
-function actor_to_entity(
-    actor::PyCall.PyObject,
-    actor_type::Int64 # AgentClass should be provided
-)
-    # Get information from the Carla actor
-    trans = actor.get_transform()
-    position = trans.location
-    orientation = trans.rotation
-    velocity = actor.get_velocity()
-    bounding_box = actor.bounding_box.extent
-
-    # Calculate variables from above
-    heading = orientation.yaw
-    speed = sqrt(velocity.x*velocity.x + velocity.y*velocity.y)
-    global_pos = AutomotiveSimulator.Vec.VecSE2(position.x, position.y, heading)
-    length = 2.0 * bounding_box.y
-    width = 2.0 * bounding_box.x
-
-    # Set our vehicle parameters
-    vehicle_state = AutomotiveSimulator.VehicleState(global_pos, speed)
-    vehicle_def = AutomotiveSimulator.VehicleDef(actor_type, length, width)
-    vehicle_id = actor.id
-
-    return AutomotiveSimulator.Entity(
-        vehicle_state,
-        vehicle_def,
-        vehicle_id
-    )
 end
 
 """
