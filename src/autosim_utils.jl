@@ -114,3 +114,44 @@ function get_entity_from_scene(
 )
     return scene[index]
 end
+
+function update_actor_from_entity(
+    actor::PyCall.PyObject,
+    entity::AutomotiveSimulator.Entity
+)
+    global_pos = AutomotiveSimulator.posg(entity)
+    trans = actor.get_transform()
+    trans.location.x = global_pos.x
+    trans.location.y = global_pos.y
+    trans.rotation.yaw = global_pos.θ
+    actor.set_transform(trans)
+end
+
+function update_world_from_scene(
+    world::PyCall.PyObject,
+    scene::AutomotiveSimulator.Scene
+)
+    actors = world.get_actors()
+    vehicles = actors.filter("vehicle.*")
+    pedestrians = actors.filter("pedestrian.*")
+    actor_ids = Vector{Int}()
+
+    for actor in vehicles
+        println(actor)
+        push!(actor_ids, actor.id)
+    end
+
+    for actor in pedestrians
+        println(actor)
+        push!(actor_ids, actor.id)
+    end
+
+    for entity in scene
+        if entity.id in actor_ids
+            update_actor_from_entity(world.get_actor(entity.id), entity)
+        else
+            println("Entity id not in Carla World", entity.id)
+        end
+    end
+
+end
