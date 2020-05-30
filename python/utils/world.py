@@ -55,44 +55,6 @@ def destroy_all_dynamic_actors(world: carla.World) -> None:
             actor.destroy()
 
 
-def draw_line_between_actors(
-    world: carla.World,
-    actor1: carla.Actor,
-    actor2: carla.Actor,
-    z_offset: float = 0.5,
-    thickness: float = 0.1,
-    color: carla.Color = carla.Color(255, 0, 0),
-    life_time: float = -1.0
-) -> None:
-    '''
-    Renders a line in the Carla Server between the two provided Actors.
-
-    Parameters
-    ----------
-    world : carla.World
-        The Carla world in which the line will be rendered.
-    actor1 : carla.Actor
-        The first Carla actor to render the line.
-    actor2 : carla.Actor
-        The second Carla actor to render the line.
-    z_offset : float, optional
-        The z location above the vehicle to start the arc, by default 0.5.
-    thickness : float, optional
-        The thickness of the rendered line, by default 0.1.
-    color : carla.Color, optional
-        The color of the rendered line, by default carla.Color(255, 0, 0).
-    life_time : float, optional
-        The time in which the line will stay on the server, by default -1.0.
-    '''
-    world.debug.draw_line(
-        actor1.get_location() + carla.Location(z=z_offset),
-        actor2.get_location() + carla.Location(z=z_offset),
-        thickness,
-        color,
-        life_time
-    )
-
-
 def draw_arc_between_actors(
     world: carla.World,
     actor1: carla.Actor,
@@ -150,6 +112,44 @@ def draw_arc_between_actors(
             life_time
         )
         prev_position = next_position
+
+
+def draw_line_between_actors(
+    world: carla.World,
+    actor1: carla.Actor,
+    actor2: carla.Actor,
+    z_offset: float = 0.5,
+    thickness: float = 0.1,
+    color: carla.Color = carla.Color(255, 0, 0),
+    life_time: float = -1.0
+) -> None:
+    '''
+    Renders a line in the Carla Server between the two provided Actors.
+
+    Parameters
+    ----------
+    world : carla.World
+        The Carla world in which the line will be rendered.
+    actor1 : carla.Actor
+        The first Carla actor to render the line.
+    actor2 : carla.Actor
+        The second Carla actor to render the line.
+    z_offset : float, optional
+        The z location above the vehicle to start the arc, by default 0.5.
+    thickness : float, optional
+        The thickness of the rendered line, by default 0.1.
+    color : carla.Color, optional
+        The color of the rendered line, by default carla.Color(255, 0, 0).
+    life_time : float, optional
+        The time in which the line will stay on the server, by default -1.0.
+    '''
+    world.debug.draw_line(
+        actor1.get_location() + carla.Location(z=z_offset),
+        actor2.get_location() + carla.Location(z=z_offset),
+        thickness,
+        color,
+        life_time
+    )
 
 
 def draw_spawn_points(world: carla.World, timeout: float = -1.0) -> None:
