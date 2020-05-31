@@ -152,6 +152,33 @@ def draw_line_between_actors(
     )
 
 
+def draw_road_ids(world: carla.World, timeout: float = -1.0) -> None:
+    '''
+    Draws all the road ids from the OpenDrive info in the current Carla world.
+
+    Parameters
+    ----------
+    world : carla.World
+        The Carla world in which to draw the spawn point indices.
+    timeout : float, optional
+        The total number of seconds in which to keep the labels in the
+        environment. (Default is -1.0, which leaves the label in the
+        environment indefinitely.)
+    '''
+    map = world.get_map()
+
+    # TODO: Should find a better way to get all roads and then draw these ids
+    for road_id in range(0, 500):
+        waypoint = map.get_waypoint_xodr(road_id, 0, 0.5)
+
+        if waypoint:
+            world.debug.draw_string(
+                waypoint.transform.location,
+                str(road_id),
+                life_time=timeout
+            )
+
+
 def draw_spawn_points(world: carla.World, timeout: float = -1.0) -> None:
     '''
     Draws all the available spawn points in the current Carla world.
