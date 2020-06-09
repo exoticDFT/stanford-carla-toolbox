@@ -31,6 +31,18 @@ export PYTHONPATH=~/Simulators/Carla-0.9.7/PythonAPI/carla/dist/carla-0.9.7-py3.
   every new terminal instance, but will be persistent for any other Python
   REPL.*
 
+In addition to the Carla PythonAPI, the current status of this project requires
+the [ConvertRoadwaysXODR project.](https://github.com/PeggyYuchunWang/ConvertRoadwaysXODR/tree/converterDev)
+This repository must be cloned and switched to the appropriate branch and an
+additional export to the PYTHONPATH needs to be done. Since this project is a
+work in progress, adding this directly to a virtual environment would be a bit
+much, so just add the following to the terminal as above, replacing the
+path with your appropriate path to the cloned repo.
+
+```bash
+export PYTHONPATH=~/Development/ConvertRoadwaysXODR:$PYTHONPATH
+```
+
 ## Julia
 
 You can setup your Julia environment to constantly update to the working
@@ -48,8 +60,12 @@ preference.
 julia
 ] activate ~/Development/VirtualEnvironments/Julia/sct-testing
 ] dev ~/Development/stanford-carla-toolbox
+] add ~/Development/ConvertRoadwaysXODR
 ] add AutomotiveSimulator
+] add AutomotiveVisualization
+] add Reel
 ] add PyCall
+] add Formatting
 ```
 
 This will create a "virtual environment" specifically for development, testing
