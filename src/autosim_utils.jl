@@ -28,8 +28,8 @@ function actor_to_entity(
     heading = orientation.yaw
     speed = sqrt(velocity.x*velocity.x + velocity.y*velocity.y)
     global_pos = AutomotiveSimulator.Vec.VecSE2(position.x, position.y, heading)
-    length = 2.0 * bounding_box.y
-    width = 2.0 * bounding_box.x
+    length = 2.0 * bounding_box.x
+    width = 2.0 * bounding_box.y
 
     # Set our vehicle parameters
     vehicle_state = AutomotiveSimulator.VehicleState(global_pos, speed)
