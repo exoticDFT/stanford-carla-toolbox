@@ -53,8 +53,8 @@ function initiate_scenario(
 
     for (spawnpoint, blueprint) in vehicles
         actor = world.try_spawn_actor(blueprint, all_sp[spawnpoint + 1])
+        println("Spawnpoint: ", spawnpoint + 1)
 
-        # If the actor was created, didn't return None, add to actors array
         if actor != PyCall.PyObject(nothing)
             push!(actors, actor)
         end

@@ -6,8 +6,9 @@ import PyCall
 
 # AutomotiveSimulator based functions
 include("autosim_utils.jl")
-export current_world_to_scene,
-       actor_to_entity,
+export actor_to_entity,
+       add_entity_to_world,
+       current_world_to_scene,
        get_entity_from_scene,
        update_actor_from_entity,
        update_world_from_scene
