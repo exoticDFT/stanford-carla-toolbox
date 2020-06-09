@@ -1,15 +1,31 @@
 import StanfordCarlaToolbox
 import PyCall
 import AutomotiveSimulator
+import AutomotiveVisualization
+import Reel
+import OpenDrive2Roadway
 using Formatting
 
 AS = AutomotiveSimulator
+OD2R = OpenDrive2Roadway
 SCT = StanfordCarlaToolbox
+
+DATA_FOLDER = "/"*relpath((@__DIR__)*"/../data","/")
 
 # Runtime stuff (Main)
 carla = PyCall.pyimport("carla")
-client = SCT.create_carla_client("localhost", 2000, 3.0, "Town04")
+sct_world_util = PyCall.pyimport("python.utils.world")
+# client = SCT.create_carla_client("localhost", 2000, 6.0, "Town01")
+client = SCT.create_carla_client("msl-zephyrus.local", 2000, 6.0, "Town01")
 world = client.get_world()
+sct_world_util.change_weather(world)
+sct_world_util.move_spectator(
+    world,
+    transform=carla.Transform(
+        carla.Location(x=216.032944, y=265.309021, z=124.616531),
+        carla.Rotation(pitch=-44.674000, yaw=-90.054848, roll=0.000034)
+    )
+)
 
 # Create a blueprint for the vehicle
 blueprint_library = world.get_blueprint_library().filter("vehicle.*")
@@ -25,54 +41,73 @@ bp3.set_attribute("color", "0, 0, 255")
 bp4.set_attribute("color", "255, 0, 255")
 
 # List of spawnpoints visible to default camera location of map (0.9.7)
-spawnpoints = [53, 54, 55, 56]
+spawnpoints = [84, 153, 154, 156]
 sp1 = spawnpoints[1]
 sp2 = spawnpoints[2]
 sp3 = spawnpoints[3]
 sp4 = spawnpoints[4]
 
-vehicles = Dict(sp1=>bp1, sp2=>bp2, sp3=>bp3, sp4=>bp4)
-actors = PyCall.PyObject[]
+vehicles = Dict(sp4 => bp4, sp3 => bp3, sp2 => bp2, sp1 => bp1)
+actors = Vector{PyCall.PyObject}()
 
 try
-    # Create a scenario with the vehicle
+    # Generate our AutomotiveSimulator Roadway from Carla Town01
+    roadway = OD2R.OpenDriveToRoadwaysConverter(
+        joinpath(DATA_FOLDER, "Town01.xodr"),
+        12
+    )
+
+    # Initialize the scenario in AutomotiveSimulator and Carla
     append!(actors, SCT.initiate_scenario(world, vehicles))
 
-    timestep = 1.0/60.0
-
+    # Add a driver model to each entity/actor
+    i = 0
     models = Dict{Int, AS.DriverModel}()
-    models[1] = AS.LatLonSeparableDriver(
-        AS.ProportionalLaneTracker(),
-        AS.IntelligentDriverModel()
+    for actor in actors
+        models[actor.id] = AS.LatLonSeparableDriver(
+            AS.ProportionalLaneTracker(),
+            AS.IntelligentDriverModel(v_des=7.5 + 2.5*i)
+        )
+        i = i + 1
+    end
+
+    # Run the AutomotiveSimulator simulation
+    num_ticks = 1000
+    timestep = 1.0/60.0
+    scene = SCT.current_world_to_scene(world, roadway)
+    scenes = AS.simulate(scene, roadway, models, num_ticks, timestep)
+
+    # Visualize with AutomotiveVisualization
+    AutomotiveVisualization.colortheme["background"] = AutomotiveVisualization.colorant"white"; # hide
+    colors = [
+        AutomotiveVisualization.colorant"purple",
+        AutomotiveVisualization.colorant"blue",
+        AutomotiveVisualization.colorant"green",
+        AutomotiveVisualization.colorant"red",
+    ]
+    camera = AutomotiveVisualization.StaticCamera(
+        position=AutomotiveSimulator.VecE2(212.0, 197.0),
+        zoom=3,
+        canvas_height=200
     )
-    models[2] = AS.LatLonSeparableDriver(
-        AS.ProportionalLaneTracker(),
-        AS.IntelligentDriverModel()
-    )
-    models[3] = AS.LatLonSeparableDriver(
-        AS.ProportionalLaneTracker(),
-        AS.IntelligentDriverModel()
-    )
-    models[4] = AS.LatLonSeparableDriver(
-        AS.ProportionalLaneTracker(),
-        AS.IntelligentDriverModel()
+    snapshot = AutomotiveVisualization.render(
+        [roadway, (AutomotiveVisualization.FancyCar(car=scene[i], color=colors[i]) for i in 1:4)...],
+        camera=camera
     )
 
-    AS.set_desired_speed!(models[1], 15.0)
-    AS.set_desired_speed!(models[2], 12.0)
-    AS.set_desired_speed!(models[3], 10.0)
-    AS.set_desired_speed!(models[4], 8.0)
+    animation = Reel.roll(fps=1.0/timestep, duration=num_ticks*timestep) do t, dt
+        i = Int(floor(t/dt)) + 1
+        AutomotiveVisualization.render([roadway, scenes[i]], canvas_height=120)
+    end
 
-    num_ticks = 10
-
-    # Run the basic sim loop
+    # Visualize with Carla
     for i = 1:num_ticks
         # Get some current Carla info and print it out
-        scene = SCT.current_world_to_scene(world)
-        println("Scene: ", scene)
+        scene = scenes[i]
         actor = actors[1]
         printfmtln("Entity({1}): {2}", actor.id, AS.get_by_id(scene, actor.id))
         printfmtln("Actor({1}): {2}", actor.id, PyCall.pystr(actor.get_transform()))
+        SCT.update_world_from_scene(world, scene)
         sleep(timestep)
     end
 
