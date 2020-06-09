@@ -58,6 +58,54 @@ def destroy_actors_in_list(client: carla.Client, actor_list: list) -> None:
     client.apply_batch([carla.command.DestroyActor(x) for x in actor_list])
 
 
+def load_xodr_world(
+    client: carla.Client,
+    filename: str,
+    **args: dict
+) -> None:
+    '''
+    Load a standalone OpenDrive file into the Carla server.
+
+    Parameters
+    ----------
+    client : carla.Client
+        The Carla client that will load the OpenDrive file into the server.
+    filename : str
+        The name of the file that will be loaded by Carla.
+    '''
+    f = open(filename, "r")
+    odr_string = f.read()
+    logging.info('Loading OpenDrive file: {}'.format(filename))
+    f.close()
+
+    params = carla.OpendriveGenerationParameters()
+
+    if "vertex_distance" in args:
+        params.vertex_distance = args.get("vertex_distance")
+
+    if "max_road_length" in args:
+        params.max_road_length = args.get("max_road_length")
+
+    if "wall_height" in args:
+        params.wall_height = args.get("wall_height")
+
+    if "additional_width" in args:
+        params.additional_width = args.get("additional_width")
+
+    if "smooth_junctions" in args:
+        params.smooth_junctions = args.get("smooth_junctions")
+
+    if "enable_mesh_visibility" in args:
+        params.enable_mesh_visibility = args.get("enable_mesh_visibility")
+
+    if "enable_pedestrian_navigation" in args:
+        params.enable_pedestrian_navigation = args.get(
+            "enable_pedestrian_navigation"
+        )
+
+    client.generate_opendrive_world(odr_string, params)
+
+
 def start_recording(
     client: carla.Client,
     filename: str
@@ -74,11 +122,7 @@ def start_recording(
         path to the file or just a file name. If the latter is used, the
         recording will be saved to the default location Carla uses.
     '''
-    logging.info(
-        'This scenario is being recorded as {}'.format(
-            filename
-        )
-    )
+    logging.info('This scenario is being recorded as {}'.format(filename))
     client.start_recorder(filename)
 
 
@@ -91,7 +135,5 @@ def stop_recording(client: carla.Client) -> None:
     client : carla.Client
         The Carla client connected to the Carla server to stop recording.
     '''
-    logging.info(
-        'The scenario is no longer recording.'
-    )
+    logging.info('The scenario is no longer recording.')
     client.stop_recorder()
