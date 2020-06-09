@@ -44,6 +44,34 @@ function actor_to_entity(
     )
 end
 
+function add_entity_to_world(
+    entity::AutomotiveSimulator.Entity,
+    world::PyCall.PyObject
+)
+    carla = PyCall.pyimport("carla")
+    sct_world_util = PyCall.pyimport("python.utils.world")
+    veh_bps = world.get_blueprint_library().filter("vehicle*")
+
+    entity_state = entity.state
+    global_pos = AutomotiveSimulator.posg(entity)
+    trans = carla.Transform()
+    trans.location.x = global_pos.x
+    trans.location.y = -global_pos.y
+    trans.location.z = 2.0
+    trans.rotation.yaw = global_pos.θ + 180.0
+
+    entity_def = entity.def
+    class = entity_def.class
+    length = entity_def.length
+    width = entity_def.width
+
+    entity_id = entity.id
+
+    actor = sct_world_util.spawn_actor(world, veh_bps, trans, false)
+
+    return actor
+end
+
 """
     current_world_to_scene(world)
 
@@ -120,13 +148,20 @@ end
 
 function update_actor_from_entity(
     actor::PyCall.PyObject,
-    entity::AutomotiveSimulator.Entity
+    entity::AutomotiveSimulator.Entity,
+    right_handed::Bool = false
 )
     global_pos = AutomotiveSimulator.posg(entity)
     trans = actor.get_transform()
     trans.location.x = global_pos.x
     trans.location.y = global_pos.y
     trans.rotation.yaw = global_pos.θ
+
+    if right_handed
+        trans.location.y = -global_pos.y
+        trans.rotation.yaw = global_pos.θ + 180.0
+    end
+
     actor.set_transform(trans)
 end
 
@@ -140,12 +175,10 @@ function update_world_from_scene(
     actor_ids = Vector{Int}()
 
     for actor in vehicles
-        println(actor)
         push!(actor_ids, actor.id)
     end
 
     for actor in pedestrians
-        println(actor)
         push!(actor_ids, actor.id)
     end
 
@@ -153,8 +186,24 @@ function update_world_from_scene(
         if entity.id in actor_ids
             update_actor_from_entity(world.get_actor(entity.id), entity)
         else
-            println("Entity id not in Carla World", entity.id)
+            println("Entity id not in Carla World: ", entity.id)
         end
     end
 
+end
+
+function update_world_from_scene(
+    world::PyCall.PyObject,
+    scene::AutomotiveSimulator.Scene,
+    mapping::Dict{Int, Int},
+    right_handed::Bool = false
+)
+    for entity in scene
+        actor_id = get(mapping, entity.id, -999)
+        update_actor_from_entity(
+            world.get_actor(actor_id),
+            entity,
+            right_handed
+        )
+    end
 end
