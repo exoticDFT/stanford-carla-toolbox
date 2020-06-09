@@ -15,6 +15,7 @@ Returns an AutomotiveSimulator.Entity converted from the provided Carla Actor.
 """
 function actor_to_entity(
     actor::PyCall.PyObject,
+    roadway::AutomotiveSimulator.Roadway,
     actor_type::Int64 # AgentClass should be provided
 )
     # Get information from the Carla actor
@@ -32,7 +33,7 @@ function actor_to_entity(
     width = 2.0 * bounding_box.y
 
     # Set our vehicle parameters
-    vehicle_state = AutomotiveSimulator.VehicleState(global_pos, speed)
+    vehicle_state = AutomotiveSimulator.VehicleState(global_pos, roadway, speed)
     vehicle_def = AutomotiveSimulator.VehicleDef(actor_type, length, width)
     vehicle_id = actor.id
 
@@ -58,7 +59,8 @@ Return a AutomotiveSimulator.Scene with vehicle and pedestrian actors in the
 current Carla World.
 """
 function current_world_to_scene(
-    world::PyCall.PyObject
+    world::PyCall.PyObject,
+    roadway::AutomotiveSimulator.Roadway
 )
     # Get the Carla actors
     actors = world.get_actors()
@@ -76,7 +78,7 @@ function current_world_to_scene(
     for actor in vehicles
         push!(
             entities,
-            actor_to_entity(actor, AutomotiveSimulator.AgentClass.CAR)
+            actor_to_entity(actor, roadway, AutomotiveSimulator.AgentClass.CAR)
         )
     end
     
@@ -85,6 +87,7 @@ function current_world_to_scene(
             entities,
             actor_to_entity(
                 actor,
+                roadway,
                 AutomotiveSimulator.AgentClass.PEDESTRIAN
             )
         )

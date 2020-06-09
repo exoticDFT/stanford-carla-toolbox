@@ -49,10 +49,10 @@ function initiate_scenario(
     vehicles::Dict{Int, PyCall.PyObject}
 )
     all_sp = world.get_map().get_spawn_points()
-    actors = PyCall.PyObject[]
+    actors = Vector{PyCall.PyObject}()
 
     for (spawnpoint, blueprint) in vehicles
-        actor = world.try_spawn_actor(blueprint, all_sp[spawnpoint+1])
+        actor = world.try_spawn_actor(blueprint, all_sp[spawnpoint + 1])
 
         # If the actor was created, didn't return None, add to actors array
         if actor != PyCall.PyObject(nothing)
