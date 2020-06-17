@@ -44,6 +44,20 @@ function actor_to_entity(
     )
 end
 
+"""
+    add_entity_to_world(entity, world)
+
+Adds the provided entity as a Carla Actor into the Carla environment.
+
+...
+# Arguments
+- `entity`: The AutomotiveSimulator Entity that will be converted.
+- `world`: The Carla World in which to add the created Actor.
+...
+
+Returns a Carla Actor containing the information provided by the entity, or None
+if the actor was unable to be created.
+"""
 function add_entity_to_world(
     entity::AutomotiveSimulator.Entity,
     world::PyCall.PyObject
@@ -146,6 +160,45 @@ function get_entity_from_scene(
     return scene[index]
 end
 
+# function get_entity_transform(
+#     entity::AutomotiveSimulator.Entity,
+#     right_handed::Bool = false
+# )
+#     carla = PyCall.pyimport("carla")
+
+#     global_pos = AutomotiveSimulator.posg(entity)
+#     trans = carla.Transform()
+#     trans.location.x = global_pos.x
+
+#     if right_handed
+#         trans.location.y = -global_pos.y
+#     else
+#         trans.location.y = global_pos.y
+#     end
+
+#     trans.rotation.yaw = global_pos.θ
+
+#     return trans
+# end
+
+"""
+    update_actor_from_entity(actor, entity, right_handed)
+
+Function to modify a Carla Actor object based on the information provided by the
+AutomotiveSimulator entity object.
+
+This function considers the "handiness" of the entity data. Carla is a
+left-handed system, so data from the entity must be converted if the data is
+in a right-handed system. Left-handed means +x to the right, +y is down and +z
+is out of the screen.
+
+...
+# Arguments:
+- `actor`: The Carla Actor that will be updated based on entity data.
+- `entity`: An AutomotiveSimulator Entity which will be used to move the actor.
+- `right_handed`: A Boolean letting the system know if the entity data is in a
+    right-handed coordinate system (+x to right, +y up)
+"""
 function update_actor_from_entity(
     actor::PyCall.PyObject,
     entity::AutomotiveSimulator.Entity,
@@ -165,6 +218,18 @@ function update_actor_from_entity(
     actor.set_transform(trans)
 end
 
+"""
+    update_world_from_scene(world, scene)
+
+Updates the Carla World to the current information from the provided
+AutomotiveSimulator Scene.
+
+...
+# Arguments:
+- `world`: The Carla World that will be updated.
+- `scene`: A AutomotiveSimulator Scene that contains the details of the
+    simulator at that instant.
+"""
 function update_world_from_scene(
     world::PyCall.PyObject,
     scene::AutomotiveSimulator.Scene
@@ -189,9 +254,31 @@ function update_world_from_scene(
             println("Entity id not in Carla World: ", entity.id)
         end
     end
-
 end
 
+"""
+    update_world_from_scene(world, scene, mapping, right_handed)
+
+Updates the Carla World to the current information from the provided
+AutomotiveSimulator Scene and the given mapping between the entity and actor
+ids.
+
+This function considers the "handiness" of the scene's data. Carla is a
+left-handed system, so data from the entity must be converted if the data is
+in a right-handed system. Left-handed means +x to the right, +y is down and +z
+is out of the screen.
+
+...
+# Arguments:
+- `world`: The Carla World that will be updated.
+- `scene`: A AutomotiveSimulator Scene that contains the details of the
+    simulator at that instant.
+- `mapping`: A mapping representing the link between an actor and an entity.
+    This is most likely necessary if the entity data was generated previous to
+    use of this toolbox (reading in pre-calculated scenes.)
+- `right_handed`: A Boolean letting the system know if the entity data is in a
+    right-handed coordinate system (+x to right, +y up)
+"""
 function update_world_from_scene(
     world::PyCall.PyObject,
     scene::AutomotiveSimulator.Scene,
