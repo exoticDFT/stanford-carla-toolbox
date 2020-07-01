@@ -32,12 +32,13 @@ export PYTHONPATH=~/Simulators/Carla-0.9.7/PythonAPI/carla/dist/carla-0.9.7-py3.
   REPL.*
 
 In addition to the Carla PythonAPI, the current status of this project requires
-the [ConvertRoadwaysXODR project.](https://github.com/PeggyYuchunWang/ConvertRoadwaysXODR/tree/converterDev)
-This repository must be cloned and switched to the appropriate branch and an
-additional export to the PYTHONPATH needs to be done. Since this project is a
-work in progress, adding this directly to a virtual environment would be a bit
-much, so just add the following to the terminal as above, replacing the
-path with your appropriate path to the cloned repo.
+the
+[ConvertRoadwaysXODR](https://github.com/PeggyYuchunWang/ConvertRoadwaysXODR/)
+project. This repository must be cloned and an additional export to the
+PYTHONPATH is needed. Since this project is a work in progress, adding this
+directly to a virtual environment would be a bit much, so just add the following
+to the terminal as above, replacing the path with your appropriate path to the
+cloned repo.
 
 ```bash
 export PYTHONPATH=~/Development/ConvertRoadwaysXODR:$PYTHONPATH

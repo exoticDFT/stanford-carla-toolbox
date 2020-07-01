@@ -33,6 +33,7 @@ interacting with the Carla simulator.
 * Carla PythonAPI egg - Found in the `PythonAPI/carla/dist/` directory of the
   Carla simulator binary above. See
   ["Setting Up Your Environment"](Setup.md#setting-up-your-environment).
+* ConvertRoadwaysXODR module ([master](https://github.com/PeggyYuchunWang/ConvertRoadwaysXODR/))
 
 ### Julia
 

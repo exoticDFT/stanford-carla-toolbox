@@ -3,11 +3,11 @@ import PyCall
 import AutomotiveSimulator
 import AutomotiveVisualization
 import Reel
-import OpenDrive2Roadway
+import OpenDriveToRoadway
 using Formatting
 
 AS = AutomotiveSimulator
-OD2R = OpenDrive2Roadway
+OD2R = OpenDriveToRoadway
 SCT = StanfordCarlaToolbox
 
 DATA_FOLDER = "/"*relpath((@__DIR__)*"/../data","/")
