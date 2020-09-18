@@ -208,11 +208,11 @@ function update_actor_from_entity(
     trans = actor.get_transform()
     trans.location.x = global_pos.x
     trans.location.y = global_pos.y
-    trans.rotation.yaw = global_pos.θ
+    trans.rotation.yaw = rad2deg(global_pos.θ)
 
     if right_handed
         trans.location.y = -global_pos.y
-        trans.rotation.yaw = global_pos.θ + 180.0
+        trans.rotation.yaw = rad2deg(-global_pos.θ)
     end
 
     actor.set_transform(trans)
@@ -271,18 +271,18 @@ is out of the screen.
 ...
 # Arguments:
 - `world`: The Carla World that will be updated.
-- `scene`: A AutomotiveSimulator Scene that contains the details of the
+- `scene`: An AutomotiveSimulator Scene that contains the details of the
     simulator at that instant.
 - `mapping`: A mapping representing the link between an actor and an entity.
-    This is most likely necessary if the entity data was generated previous to
-    use of this toolbox (reading in pre-calculated scenes.)
+    This is most likely necessary if the entity data was generated previous via
+    AutomotiveSimulator (reading in pre-calculated Scene objects.)
 - `right_handed`: A Boolean letting the system know if the entity data is in a
     right-handed coordinate system (+x to right, +y up)
 """
 function update_world_from_scene(
     world::PyCall.PyObject,
     scene::AutomotiveSimulator.Scene,
-    mapping::Dict{Int, Int},
+    mapping::Dict{Any, Int},
     right_handed::Bool = false
 )
     for entity in scene
