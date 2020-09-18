@@ -294,3 +294,46 @@ function update_world_from_scene(
         )
     end
 end
+
+"""
+    visualize_in_carla(world, scenes, time_step, entity_map, right_handed)
+
+Takes a collection of pre-simulated scenes from an Automotive Simulator run and
+visualizes it in the provided Carla world.
+
+This function considers the "handiness" of the scene's data. Carla is a
+left-handed system, so data from the entity must be converted if the data is
+in a right-handed system. Left-handed means +x to the right, +y is down and +z
+is out of the screen.
+
+...
+# Arguments:
+- `world`: The Carla World that will be updated.
+- `scenes`: A collection of AutomotiveSimulator Scenes containing the details
+    of the simulation over some time.
+- `timestep`: The time-step used during the AutomotiveSimulator simulation.
+- `entity_map`: A mapping representing the link between an actor and an entity.
+    This is most likely necessary if the entity data was generated previous via
+    AutomotiveSimulator (reading in pre-calculated Scene objects.)
+- `right_handed`: A Boolean letting the system know if the entity data is in a
+    right-handed coordinate system (+x to right, +y up)
+"""
+function visualize_in_carla(
+    world::PyCall.PyObject,
+    scenes::Vector{<:AutomotiveSimulator.Scene},
+    time_step::AbstractFloat,
+    entity_map::Dict{Any, Int},
+    right_handed::Bool = false
+)
+    for i = 1 : length(scenes)
+        start_time = Dates.datetime2epochms(Dates.now())
+        scene = scenes[i]
+        update_world_from_scene(world, scene, entity_map, right_handed)
+        sleep_time_ms = (start_time + time_step*1000) -
+            Dates.datetime2epochms(Dates.now())
+
+        if sleep_time_ms > 0
+            sleep(sleep_time_ms / 1000.0)
+        end
+    end
+end

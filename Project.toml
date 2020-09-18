@@ -5,6 +5,7 @@ version = "0.1.0"
 
 [deps]
 AutomotiveSimulator = "6aa42d20-6c96-11ea-1103-339224409280"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 Formatting = "59287772-0a20-5a39-b81b-1366585eb4c0"
 OpenDriveToRoadway = "b478468a-968f-4f20-bfa3-a00529f4778e"
 PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"

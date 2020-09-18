@@ -1,6 +1,7 @@
 module StanfordCarlaToolbox
 
 import AutomotiveSimulator
+import Dates
 import Formatting
 import PyCall
 
@@ -11,7 +12,8 @@ export actor_to_entity,
        current_world_to_scene,
        get_entity_from_scene,
        update_actor_from_entity,
-       update_world_from_scene
+       update_world_from_scene,
+       visualize_in_carla
 
 # Carla client based functions
 include("client_utils.jl")
