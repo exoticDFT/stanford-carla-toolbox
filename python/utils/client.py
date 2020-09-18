@@ -73,10 +73,13 @@ def load_xodr_world(
     filename : str
         The name of the file that will be loaded by Carla.
     '''
-    f = open(filename, "r")
-    odr_string = f.read()
-    logging.info('Loading OpenDrive file: {}'.format(filename))
-    f.close()
+    try:
+        logging.info('Loading OpenDrive file: {}'.format(filename))
+        f = open(filename, "r")
+        odr_string = f.read()
+        f.close()
+    except FileNotFoundError:
+        logging.error('Could not find file: {}'.format(filename))
 
     params = carla.OpendriveGenerationParameters()
 
